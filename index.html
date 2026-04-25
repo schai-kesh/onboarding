@@ -604,39 +604,142 @@ document.getElementById('calcBtn').addEventListener('click', () => {
   const dist = selectedCity.d;
   const nomeCidade = selectedCity.n;
 
-  // Modalidade
+  // Modalidade — lógica baseada na tabela de regras validada (31 regras)
   let mod='', badgeClass='', motivos=[], alertas=[];
-  const baixa = fam==='baixa', expSim = exp==='sim', pres = fmt.startsWith('presencial');
 
-  if (num>=500) {
-    mod='Presencial'; badgeClass='badge-presencial';
-    motivos.push('Volume acima de 500 colaboradores');
-  } else if (num>=100) {
-    if (baixa||pres||expSim) {
-      mod='Presencial'; badgeClass='badge-presencial';
-      if(baixa) motivos.push('Baixa familiaridade com tecnologia');
-      if(pres) motivos.push('Colaboradores trabalham de forma presencial');
-      if(expSim) motivos.push('Potencial de expansão no grupo');
+  const expSim   = exp === 'sim';
+  const perto200 = dist <= 200;
+  const perto300 = dist <= 300;
+  const perto500 = dist <= 500;
+  const acessoFacil = acs === 'facil';
+
+  // REGRA 1 — Formato remoto é decisor absoluto
+  if (fmt === 'remoto') {
+    mod = 'Remoto'; badgeClass = 'badge-remoto';
+    motivos.push('Formato de trabalho remoto — onboarding sempre remoto');
+
+  // ── ALTA familiaridade ──────────────────────────────────────────
+  } else if (fam === 'alta') {
+
+    if (fmt === 'presencial_centralizado') {
+      if (num >= 30 && expSim && perto500) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Alta familiaridade, formato presencial centralizado, potencial de expansão e distância viável');
+      } else {
+        mod = 'Remoto'; badgeClass = 'badge-remoto';
+        if (num < 30) motivos.push('Volume abaixo de 30 colaboradores');
+        else if (!expSim) motivos.push('Sem potencial de expansão');
+        else motivos.push('Distância acima de 500 km inviabiliza presencial com alta familiaridade');
+      }
+
+    } else if (fmt === 'presencial_distribuido') {
+      if (expSim && perto200) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Potencial de expansão e distância viável para presencial distribuído');
+      } else {
+        mod = 'Remoto'; badgeClass = 'badge-remoto';
+        if (!expSim) motivos.push('Sem potencial de expansão — presencial distribuído não se justifica');
+        else motivos.push('Distância acima de 200 km inviabiliza presencial distribuído com alta familiaridade');
+      }
+
     } else {
-      mod='Remoto assistido'; badgeClass='badge-remoto-assistido';
-      motivos.push('Volume intermediário sem fatores presenciais obrigatórios');
+      if (num >= 300) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Volume acima de 300 colaboradores');
+      } else if (expSim) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Potencial de expansão no grupo');
+      } else {
+        mod = 'Remoto'; badgeClass = 'badge-remoto';
+        motivos.push('Alta familiaridade, formato híbrido, volume abaixo de 300 e sem expansão');
+      }
     }
-  } else if (num>50) {
-    if (baixa||expSim) {
-      mod='Presencial'; badgeClass='badge-presencial';
-      if(baixa) motivos.push('Baixa familiaridade com tecnologia');
-      if(expSim) motivos.push('Potencial de expansão no grupo');
+
+  // ── MÉDIA familiaridade ─────────────────────────────────────────
+  } else if (fam === 'media') {
+
+    if (fmt === 'presencial_centralizado') {
+      if (!acessoFacil) {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Acesso difícil ao local inviabiliza presencial');
+      } else if (num >= 200) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Volume acima de 200 com acesso fácil e formato centralizado');
+      } else {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Volume abaixo de 200 — remoto assistido mais eficiente');
+      }
+
+    } else if (fmt === 'presencial_distribuido') {
+      if (expSim && perto500) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Potencial de expansão e distância viável');
+      } else {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        if (!expSim) motivos.push('Sem potencial de expansão para justificar presencial distribuído');
+        else motivos.push('Distância acima de 500 km — presencial distribuído inviável');
+      }
+
     } else {
-      mod='Remoto assistido'; badgeClass='badge-remoto-assistido';
-      motivos.push('Volume acima de 50 sem fatores presenciais obrigatórios');
+      if (num >= 300) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Volume acima de 300 colaboradores');
+      } else {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Familiaridade média, híbrido e volume abaixo de 300');
+      }
     }
+
+  // ── BAIXA familiaridade ─────────────────────────────────────────
   } else {
-    if (baixa) {
-      mod='Remoto assistido'; badgeClass='badge-remoto-assistido';
-      motivos.push('Baixa familiaridade — suporte mais ativo necessário');
+
+    if (fmt === 'presencial_centralizado') {
+      if (num >= 100) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade com tecnologia e volume acima de 100');
+      } else if (expSim && perto500) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade, potencial de expansão e distância viável');
+      } else if (num >= 51 && !expSim && perto300) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade, volume entre 51–99, sem expansão mas distância viável (≤ 300 km)');
+      } else if (num < 50 && !expSim && !perto500) {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Volume baixo, sem expansão e distância longa — remoto assistido');
+      } else {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade prioriza presencial');
+      }
+
+    } else if (fmt === 'presencial_distribuido') {
+      if (num >= 100) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade com tecnologia e volume acima de 100');
+      } else if (expSim && perto500) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade, potencial de expansão e distância viável');
+      } else if (expSim && !perto500) {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Potencial de expansão mas distância acima de 500 km inviabiliza presencial');
+      } else {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Volume abaixo de 100 e sem expansão');
+      }
+
     } else {
-      mod='Remoto'; badgeClass='badge-remoto';
-      motivos.push('Volume baixo com boa familiaridade tecnológica');
+      if (num >= 100) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade com tecnologia e volume acima de 100');
+      } else if (expSim && perto500) {
+        mod = 'Presencial'; badgeClass = 'badge-presencial';
+        motivos.push('Baixa familiaridade, potencial de expansão e distância viável');
+      } else if (expSim && !perto500) {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Potencial de expansão mas distância acima de 500 km inviabiliza presencial');
+      } else {
+        mod = 'Remoto assistido'; badgeClass = 'badge-remoto-assistido';
+        motivos.push('Volume abaixo de 100 e sem expansão');
+      }
     }
   }
 
