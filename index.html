@@ -3,720 +3,740 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kesh — Calculadora de Onboarding</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>Kesh Bank — Calculadora de Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #F5F3EE;
-      --surface: #FFFFFF;
-      --surface2: #EFEFEA;
-      --border: #E0DDD6;
-      --border2: #C8C5BC;
-      --text: #1A1916;
-      --text2: #6B6860;
-      --text3: #9E9C96;
-      --accent: #1A1916;
-      --blue-bg: #EAF0FB;
-      --blue-text: #1A3A7A;
-      --blue-border: #B8CCEE;
-      --green-bg: #E8F5EC;
-      --green-text: #1A5C30;
-      --green-border: #B3D9C0;
-      --amber-bg: #FDF3E3;
-      --amber-text: #7A4A10;
-      --amber-border: #F0CF96;
-      --red-bg: #FDECEA;
-      --red-text: #7A2020;
-      --red-border: #F0B8B3;
+      --green-light: #7ED348;
+      --green-mid: #4CAF2A;
+      --green-dark: #1E6B14;
+      --black: #0A0A0A;
+      --surface: #141C14;
+      --border: rgba(126,211,72,0.18);
+      --border2: rgba(126,211,72,0.35);
+      --text: #F0F5EE;
+      --text2: #A8BFA4;
+      --text3: #5A6E57;
       --radius: 10px;
       --radius-lg: 16px;
     }
-
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
       color: var(--text);
       min-height: 100vh;
-      padding: 2rem 1rem 4rem;
+      padding-bottom: 4rem;
+      background-image:
+        radial-gradient(ellipse 70% 50% at 85% 5%, rgba(76,175,42,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 5% 90%, rgba(30,107,20,0.08) 0%, transparent 50%);
     }
-
-    header {
-      max-width: 680px;
-      margin: 0 auto 2.5rem;
+    /* Header */
+    .site-header {
+      background: rgba(8,8,8,0.96);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
     }
-
-    .logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
+    .logo-wrap { display: flex; align-items: center; gap: 10px; }
+    .logo-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
       font-size: 22px;
-      letter-spacing: -0.5px;
-      color: var(--text);
-    }
-
-    .logo span {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: var(--text);
-      border-radius: 50%;
-      margin-left: 4px;
-      vertical-align: middle;
-      position: relative;
-      top: -2px;
-    }
-
-    .header-label {
-      font-size: 12px;
-      color: var(--text3);
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      max-width: 680px;
-      margin: 0 auto;
-      overflow: hidden;
-    }
-
-    .card-header {
-      padding: 1.5rem 1.75rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .card-icon svg { width: 18px; height: 18px; color: var(--text2); }
-
-    .card-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 3px;
-    }
-
-    .card-subtitle {
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.5;
-    }
-
-    .card-body {
-      padding: 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .field-group { display: flex; flex-direction: column; gap: 10px; }
-
-    .field-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    .pill {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text2);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .pill:hover {
-      border-color: var(--border2);
-      color: var(--text);
-      background: var(--bg);
-    }
-
-    .pill.active {
-      background: var(--text);
-      border-color: var(--text);
       color: #fff;
-      font-weight: 500;
+      letter-spacing: 0.5px;
     }
-
-    .num-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .num-row input[type=number] {
-      width: 120px;
-      padding: 9px 12px;
-      font-size: 15px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    .num-row input[type=number]:focus { border-color: var(--border2); }
-    .num-row input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-
-    .num-label { font-size: 13px; color: var(--text3); }
-
-    .divider {
-      height: 1px;
-      background: var(--border);
-    }
-
-    .card-footer {
-      padding: 1.25rem 1.75rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .btn-clear {
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 18px;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      color: var(--text2);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .btn-clear:hover { border-color: var(--border2); color: var(--text); }
-
-    .btn-calc {
-      background: var(--text);
-      border: 1px solid var(--text);
-      border-radius: var(--radius);
-      padding: 10px 22px;
-      font-size: 13px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      color: #fff;
-      cursor: pointer;
-      transition: opacity 0.15s;
-      letter-spacing: 0.02em;
-    }
-
-    .btn-calc:hover { opacity: 0.85; }
-
-    /* Result */
-    #resultView { display: none; }
-
-    .result-hero {
-      padding: 1.75rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .result-hero-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text3);
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-
-    .result-hero-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 24px;
+    .logo-sub {
+      font-size: 9px;
       font-weight: 700;
-      color: var(--text);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-light);
     }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
+    .header-tag {
+      font-size: 11px;
       font-weight: 600;
-      font-family: 'Syne', sans-serif;
-      letter-spacing: 0.03em;
-      border: 1px solid;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text3);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 20px;
     }
-
-    .badge-presencial { background: var(--blue-bg); color: var(--blue-text); border-color: var(--blue-border); }
-    .badge-remoto { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
-    .badge-remoto-assistido { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .metric-cell {
-      background: var(--surface);
-      padding: 1.25rem 1.5rem;
+    /* Hero */
+    .hero {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 1.25rem;
       text-align: center;
     }
-
-    .metric-cell-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text3);
-      margin-bottom: 6px;
-    }
-
-    .metric-cell-value {
-      font-family: 'Syne', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1;
-    }
-
-    .metric-cell-sub {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 4px;
-    }
-
-    .result-sections { padding: 1.75rem; display: flex; flex-direction: column; gap: 1.25rem; }
-
-    .section-block { display: flex; flex-direction: column; gap: 8px; }
-
-    .section-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--text3);
-      font-weight: 500;
-    }
-
-    .alert-box {
-      padding: 11px 14px;
-      border-radius: var(--radius);
-      font-size: 13px;
-      line-height: 1.55;
-      border: 1px solid;
-    }
-
-    .alert-blue { background: var(--blue-bg); color: var(--blue-text); border-color: var(--blue-border); }
-    .alert-amber { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
-
-    .motivo-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .motivo-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.5;
-    }
-
-    .motivo-dot {
-      width: 5px;
-      height: 5px;
-      background: var(--border2);
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 7px;
-    }
-
-    .summary-table { width: 100%; border-collapse: collapse; }
-
-    .summary-table tr { border-bottom: 1px solid var(--border); }
-    .summary-table tr:last-child { border-bottom: none; }
-
-    .summary-table td {
-      padding: 9px 0;
-      font-size: 13px;
-    }
-
-    .summary-table td:first-child { color: var(--text3); width: 55%; }
-    .summary-table td:last-child { color: var(--text); font-weight: 500; text-align: right; }
-
-    .result-footer {
-      padding: 1.25rem 1.75rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-start;
-    }
-
-    .btn-back {
-      background: transparent;
-      border: none;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      color: var(--text3);
-      cursor: pointer;
-      display: flex;
+    .hero-badge {
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      transition: color 0.15s;
-      padding: 0;
+      gap: 7px;
+      background: rgba(126,211,72,0.08);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 1.1rem;
     }
-
-    .btn-back:hover { color: var(--text); }
-
-    .error-shake {
-      animation: shake 0.3s ease;
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green-light);
+      animation: blink 2s infinite;
     }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      75% { transform: translateX(6px); }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.35} }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: 0.65rem;
     }
-
-    @media (max-width: 540px) {
-      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-      .metric-cell:nth-child(3) { grid-column: span 2; }
-      .result-hero { flex-direction: column; align-items: flex-start; }
+    .hero h1 span { color: var(--green-light); }
+    .hero p { font-size: 14px; color: var(--text2); line-height: 1.65; }
+    /* Container */
+    .container { max-width: 780px; margin: 0 auto; padding: 0 1.5rem; }
+    /* Card */
+    .card {
+      background: rgba(16,22,16,0.85);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .card-section { padding: 1.4rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .card-section:last-child { border-bottom: none; }
+    .section-heading { display: flex; align-items: center; gap: 9px; margin-bottom: 1rem; }
+    .section-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(126,211,72,0.12);
+      border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: var(--green-light);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--text3);
+    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .field-group { margin-bottom: 0.9rem; }
+    .field-group:last-child { margin-bottom: 0; }
+    .field-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 7px; display: block; }
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(126,211,72,0.18);
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text2); cursor: pointer;
+      transition: all 0.13s;
+      font-family: 'Barlow', sans-serif;
+    }
+    .pill:hover { background: rgba(126,211,72,0.07); border-color: var(--border2); color: var(--text); }
+    .pill.active { background: rgba(126,211,72,0.14); border-color: var(--green-light); color: var(--green-light); font-weight: 600; }
+    .input-field {
+      width: 100%;
+      padding: 10px 13px;
+      font-size: 14px; font-family: 'Barlow', sans-serif; font-weight: 500;
+      border: 1px solid rgba(126,211,72,0.18);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.03);
+      color: var(--text); outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    .input-field:focus { border-color: var(--green-light); }
+    .input-field::placeholder { color: var(--text3); }
+    /* Stepper */
+    .stepper {
+      display: flex; align-items: center;
+      border: 1px solid rgba(126,211,72,0.2);
+      border-radius: var(--radius);
+      overflow: hidden; width: fit-content;
+    }
+    .stepper-btn {
+      background: rgba(255,255,255,0.03);
+      border: none; width: 38px; height: 38px;
+      font-size: 18px; color: var(--green-light);
+      cursor: pointer; transition: background 0.13s;
+      font-family: 'Barlow', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stepper-btn:hover { background: rgba(126,211,72,0.1); }
+    .stepper-val {
+      min-width: 50px; text-align: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px; font-weight: 700; color: #fff;
+      border-left: 1px solid rgba(126,211,72,0.18);
+      border-right: 1px solid rgba(126,211,72,0.18);
+      height: 38px; display: flex; align-items: center; justify-content: center;
+    }
+    .stepper-hint { font-size: 12px; color: var(--text3); margin-left: 11px; }
+    /* Card footer */
+    .card-footer {
+      padding: 1.1rem 1.5rem;
+      display: flex; justify-content: flex-end; gap: 9px;
+      background: rgba(0,0,0,0.18);
+    }
+    .btn-clear {
+      background: transparent;
+      border: 1px solid rgba(126,211,72,0.18);
+      border-radius: var(--radius);
+      padding: 9px 18px;
+      font-size: 13px; font-family: 'Barlow', sans-serif; font-weight: 600;
+      color: var(--text3); cursor: pointer; transition: all 0.14s;
+    }
+    .btn-clear:hover { border-color: var(--border2); color: var(--text2); }
+    .btn-calc {
+      background: linear-gradient(135deg, #3A9E1A, #7ED348);
+      border: none; border-radius: var(--radius);
+      padding: 9px 26px;
+      font-size: 13px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: #000; cursor: pointer;
+      transition: opacity 0.13s, transform 0.1s;
+    }
+    .btn-calc:hover { opacity: 0.88; }
+    .btn-calc:active { transform: scale(0.98); }
+    /* Autocomplete */
+    .autocomplete-wrap { position: relative; }
+    .autocomplete-list {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: #141C14;
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      z-index: 100; max-height: 200px; overflow-y: auto;
+      display: none;
+    }
+    .ac-item {
+      padding: 8px 13px; font-size: 13px; color: var(--text2);
+      cursor: pointer; border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover { background: rgba(126,211,72,0.09); color: var(--text); }
+    /* RESULT */
+    #resultView { display: none; }
+    .result-hero {
+      padding: 1.75rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .res-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text3); margin-bottom: 5px;
+    }
+    .res-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 32px; font-weight: 800;
+      color: #fff; text-transform: uppercase;
+    }
+    .mod-badge {
+      display: inline-flex; align-items: center;
+      padding: 6px 16px; border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      border: 1px solid; margin-top: 7px;
+    }
+    .badge-presencial { background: rgba(55,138,221,0.14); color: #80C4F4; border-color: rgba(55,138,221,0.35); }
+    .badge-remoto { background: rgba(126,211,72,0.13); color: var(--green-light); border-color: rgba(126,211,72,0.38); }
+    .badge-remoto-assistido { background: rgba(240,159,39,0.13); color: #F0D080; border-color: rgba(240,159,39,0.38); }
+    /* Metrics */
+    .metrics-strip {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    .mc {
+      padding: 1.1rem 1rem;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .mc:last-child { border-right: none; }
+    .mc-label { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text3); margin-bottom: 5px; }
+    .mc-value { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 800; color: #fff; line-height: 1; }
+    .mc-sub { font-size: 10px; color: var(--text3); margin-top: 3px; }
+    .v-green { color: var(--green-light); }
+    .v-amber { color: #F0D080; }
+    .v-red { color: #F09090; }
+    .v-blue { color: #80C4F4; }
+    /* Transport */
+    .transport-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.12);
+    }
+    .t-icon {
+      width: 34px; height: 34px;
+      background: rgba(126,211,72,0.09);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .t-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .t-desc { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    /* Detail */
+    .detail-sections { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+    .db { display: flex; flex-direction: column; gap: 7px; }
+    .db-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
+    .abox {
+      padding: 11px 15px; border-radius: var(--radius);
+      font-size: 13px; line-height: 1.55;
+      border: 1px solid; font-weight: 500;
+    }
+    .a-green { background: rgba(126,211,72,0.07); color: #A8E878; border-color: rgba(126,211,72,0.22); }
+    .a-amber { background: rgba(240,159,39,0.07); color: #F0D080; border-color: rgba(240,159,39,0.28); }
+    .motivo-list { display: flex; flex-direction: column; gap: 6px; }
+    .motivo-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text2); line-height: 1.5; }
+    .motivo-dot { width: 5px; height: 5px; background: var(--green-mid); border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+    .sum-table { width: 100%; border-collapse: collapse; }
+    .sum-table tr { border-bottom: 1px solid var(--border); }
+    .sum-table tr:last-child { border-bottom: none; }
+    .sum-table td { padding: 7px 0; font-size: 13px; }
+    .sum-table td:first-child { color: var(--text3); width: 55%; }
+    .sum-table td:last-child { color: var(--text); font-weight: 600; text-align: right; }
+    .result-footer {
+      padding: 1.1rem 1.5rem; border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.18);
+    }
+    .btn-back {
+      background: transparent; border: 1px solid rgba(126,211,72,0.18);
+      border-radius: var(--radius); padding: 8px 16px;
+      font-size: 13px; font-family: 'Barlow', sans-serif; font-weight: 600;
+      color: var(--text3); cursor: pointer; transition: all 0.14s;
+    }
+    .btn-back:hover { border-color: var(--border2); color: var(--text2); }
+    .site-footer { max-width: 780px; margin: 2rem auto 0; padding: 0 1.5rem; text-align: center; opacity: 0.3; font-size: 11px; color: var(--text3); }
+    .shake { animation: sh 0.3s ease; }
+    @keyframes sh { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+    @media(max-width:560px){
+      .two-col{grid-template-columns:1fr}
+      .metrics-strip{grid-template-columns:repeat(2,1fr)}
+      .mc:nth-child(2){border-right:none}
+      .hero h1{font-size:28px}
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">kesh<span></span></div>
-  <div class="header-label">Calculadora de Onboarding</div>
+<header class="site-header">
+  <div class="logo-wrap">
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+      <circle cx="17" cy="17" r="15.5" stroke="url(#lg1)" stroke-width="2"/>
+      <text x="17" y="23" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="17" fill="url(#lg1)">K</text>
+      <defs><linearGradient id="lg1" x1="0" y1="0" x2="34" y2="34" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7ED348"/><stop offset="100%" stop-color="#1E6B14"/></linearGradient></defs>
+    </svg>
+    <div>
+      <div class="logo-name">KESHBANK</div>
+      <div class="logo-sub">Banco do Colaborador</div>
+    </div>
+  </div>
+  <span class="header-tag">Calculadora de Onboarding</span>
 </header>
 
-<div class="card">
+<div class="hero">
+  <div class="hero-badge">Ferramenta interna</div>
+  <h1>Planeje a <span>implantação</span><br>do seu cliente</h1>
+  <p>Preencha os dados e receba a recomendação de modalidade, equipe, transporte e custo estimado.</p>
+</div>
 
-  <!-- FORM VIEW -->
+<div class="container">
+
+  <!-- FORM -->
   <div id="formView">
-    <div class="card-header">
-      <div class="card-icon">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="4" y="2" width="12" height="16" rx="2"/>
-          <path d="M7 7h6M7 10h6M7 13h4"/>
-        </svg>
-      </div>
-      <div>
-        <div class="card-title">Dados do cliente</div>
-        <div class="card-subtitle">Preencha as informações abaixo para receber a recomendação de modalidade e equipe.</div>
-      </div>
-    </div>
+    <div class="card" id="mainCard">
 
-    <div class="card-body">
-
-      <div class="field-group">
-        <label class="field-label">Quantos colaboradores serão ativados?</label>
-        <div class="num-row">
-          <input type="number" id="numColab" min="1" placeholder="150">
-          <span class="num-label">colaboradores</span>
+      <div class="card-section">
+        <div class="section-heading"><div class="section-num">1</div><span class="section-title">Dados do cliente</span></div>
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Número de colaboradores</label>
+            <input type="number" id="numColab" class="input-field" min="1" placeholder="Ex: 150">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Cidade do cliente</label>
+            <div class="autocomplete-wrap">
+              <input type="text" id="cidadeInput" class="input-field" placeholder="Ex: Curitiba, PR" autocomplete="off">
+              <div class="autocomplete-list" id="acList"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="divider"></div>
-
-      <div class="field-group">
-        <label class="field-label">Familiaridade dos colaboradores com tecnologia</label>
-        <div class="pills" data-group="familiaridade">
-          <button type="button" class="pill" data-value="alta">Alta — usam smartphone com facilidade</button>
-          <button type="button" class="pill" data-value="media">Média — precisam de algum suporte</button>
-          <button type="button" class="pill" data-value="baixa">Baixa — pouca familiaridade</button>
+      <div class="card-section">
+        <div class="section-heading"><div class="section-num">2</div><span class="section-title">Perfil dos colaboradores</span></div>
+        <div class="field-group">
+          <label class="field-label">Familiaridade com tecnologia</label>
+          <div class="pills" data-group="familiaridade">
+            <button type="button" class="pill" data-value="alta">Alta — usam smartphone com facilidade</button>
+            <button type="button" class="pill" data-value="media">Média — precisam de algum suporte</button>
+            <button type="button" class="pill" data-value="baixa">Baixa — pouca familiaridade</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Formato de trabalho</label>
+          <div class="pills" data-group="formato">
+            <button type="button" class="pill" data-value="presencial_centralizado">Presencial — poucas unidades</button>
+            <button type="button" class="pill" data-value="presencial_distribuido">Presencial — muitas unidades</button>
+            <button type="button" class="pill" data-value="remoto">Remoto / Home office</button>
+            <button type="button" class="pill" data-value="hibrido">Híbrido</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Potencial de expansão no grupo</label>
+          <div class="pills" data-group="expansao">
+            <button type="button" class="pill" data-value="sim">Sim — há potencial de novas vidas</button>
+            <button type="button" class="pill" data-value="nao">Não</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Acesso ao local</label>
+          <div class="pills" data-group="acesso">
+            <button type="button" class="pill" data-value="facil">Fácil — boa infraestrutura</button>
+            <button type="button" class="pill" data-value="dificil">Difícil — localização limitada</button>
+          </div>
         </div>
       </div>
 
-      <div class="divider"></div>
-
-      <div class="field-group">
-        <label class="field-label">Formato de trabalho</label>
-        <div class="pills" data-group="formato">
-          <button type="button" class="pill" data-value="presencial_centralizado">Presencial — poucas unidades</button>
-          <button type="button" class="pill" data-value="presencial_distribuido">Presencial — muitas unidades</button>
-          <button type="button" class="pill" data-value="remoto">Remoto / Home office</button>
-          <button type="button" class="pill" data-value="hibrido">Híbrido</button>
+      <div class="card-section">
+        <div class="section-heading"><div class="section-num">3</div><span class="section-title">Equipe disponível</span></div>
+        <div class="field-group">
+          <label class="field-label">Quantos profissionais levar?</label>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div class="stepper">
+              <button type="button" class="stepper-btn" id="decBtn">−</button>
+              <div class="stepper-val" id="profVal">3</div>
+              <button type="button" class="stepper-btn" id="incBtn">+</button>
+            </div>
+            <span class="stepper-hint" id="stepHint">Time padrão (Schai, Gabi, Yasmin)</span>
+          </div>
         </div>
       </div>
 
-      <div class="divider"></div>
-
-      <div class="field-group">
-        <label class="field-label">Potencial de expansão no grupo</label>
-        <div class="pills" data-group="expansao">
-          <button type="button" class="pill" data-value="sim">Sim — há potencial de novas vidas</button>
-          <button type="button" class="pill" data-value="nao">Não</button>
-        </div>
+      <div class="card-footer">
+        <button type="button" class="btn-clear" id="clearBtn">Limpar</button>
+        <button type="button" class="btn-calc" id="calcBtn">Calcular implantação →</button>
       </div>
-
-      <div class="divider"></div>
-
-      <div class="field-group">
-        <label class="field-label">Estrutura de acesso aos colaboradores</label>
-        <div class="pills" data-group="acesso">
-          <button type="button" class="pill" data-value="facil">Fácil — local acessível, boa infraestrutura</button>
-          <button type="button" class="pill" data-value="dificil">Difícil — localização remota ou limitada</button>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="card-footer">
-      <button type="button" class="btn-clear" id="clearBtn">Limpar</button>
-      <button type="button" class="btn-calc" id="calcBtn">Calcular →</button>
     </div>
   </div>
 
-  <!-- RESULT VIEW -->
+  <!-- RESULT -->
   <div id="resultView">
-    <div class="result-hero">
-      <div>
-        <div class="result-hero-label">Modalidade recomendada</div>
-        <div class="result-hero-title" id="resultTitle">—</div>
-      </div>
-      <div id="resultBadge"></div>
-    </div>
-
-    <div class="metrics-grid" id="metricsGrid"></div>
-
-    <div class="result-sections">
-
-      <div class="section-block">
-        <div class="section-label">Estratégia de execução</div>
-        <div class="alert-box alert-blue" id="estrategiaBox"></div>
-      </div>
-
-      <div class="section-block">
-        <div class="section-label">Por que essa recomendação?</div>
-        <div class="motivo-list" id="motivoList"></div>
-      </div>
-
-      <div id="alertaSection" style="display:none">
-        <div class="section-block">
-          <div class="section-label">Pontos de atenção</div>
-          <div id="alertaList"></div>
+    <div class="card">
+      <div class="result-hero">
+        <div>
+          <div class="res-label">Modalidade recomendada</div>
+          <div class="res-title" id="rTitle"></div>
+          <div id="rBadge"></div>
+        </div>
+        <div style="text-align:right">
+          <div class="res-label">Destino</div>
+          <div style="font-size:17px;font-weight:700;color:#fff;margin-top:4px" id="rCidade"></div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px" id="rDist"></div>
         </div>
       </div>
 
-      <div class="section-block">
-        <div class="section-label">Resumo do cliente</div>
-        <table class="summary-table" id="summaryTable"></table>
+      <div class="metrics-strip" id="rMetrics"></div>
+
+      <div class="transport-row" id="rTransport"></div>
+
+      <div class="detail-sections">
+        <div class="db">
+          <div class="db-label">Estratégia de execução</div>
+          <div class="abox a-green" id="rEstrategia"></div>
+        </div>
+        <div class="db">
+          <div class="db-label">Por que essa recomendação?</div>
+          <div class="motivo-list" id="rMotivos"></div>
+        </div>
+        <div class="db" id="rAlertaSection" style="display:none">
+          <div class="db-label">Pontos de atenção</div>
+          <div id="rAlertaList"></div>
+        </div>
+        <div class="db">
+          <div class="db-label">Resumo completo</div>
+          <table class="sum-table" id="rSummary"></table>
+        </div>
       </div>
 
-    </div>
-
-    <div class="result-footer">
-      <button type="button" class="btn-back" id="backBtn">← Preencher novamente</button>
+      <div class="result-footer">
+        <button type="button" class="btn-back" id="backBtn">← Preencher novamente</button>
+      </div>
     </div>
   </div>
 
+  <div class="site-footer">Kesh Bank — Banco do Colaborador · Ferramenta interna</div>
 </div>
 
 <script>
-  // Pill selection
-  document.querySelectorAll('.pills').forEach(group => {
-    group.querySelectorAll('.pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-      });
+const cidades = [
+  {n:"São Paulo, SP",d:0},{n:"Guarulhos, SP",d:25},{n:"Campinas, SP",d:100},{n:"São Bernardo do Campo, SP",d:22},
+  {n:"Santo André, SP",d:20},{n:"Osasco, SP",d:18},{n:"Ribeirão Preto, SP",d:313},{n:"Sorocaba, SP",d:100},
+  {n:"São José dos Campos, SP",d:90},{n:"Santos, SP",d:75},{n:"Jundiaí, SP",d:55},{n:"Piracicaba, SP",d:160},
+  {n:"Bauru, SP",d:335},{n:"Marília, SP",d:432},{n:"Franca, SP",d:398},{n:"Presidente Prudente, SP",d:558},
+  {n:"São José do Rio Preto, SP",d:447},{n:"Rio de Janeiro, RJ",d:430},{n:"Niterói, RJ",d:450},
+  {n:"Duque de Caxias, RJ",d:450},{n:"Belo Horizonte, MG",d:585},{n:"Uberlândia, MG",d:576},
+  {n:"Contagem, MG",d:590},{n:"Juiz de Fora, MG",d:500},{n:"Curitiba, PR",d:408},{n:"Londrina, PR",d:453},
+  {n:"Maringá, PR",d:540},{n:"Foz do Iguaçu, PR",d:1000},{n:"Porto Alegre, RS",d:1108},
+  {n:"Caxias do Sul, RS",d:1177},{n:"Pelotas, RS",d:1284},{n:"Florianópolis, SC",d:700},
+  {n:"Joinville, SC",d:510},{n:"Blumenau, SC",d:660},{n:"Chapecó, SC",d:1000},
+  {n:"Salvador, BA",d:1975},{n:"Feira de Santana, BA",d:2050},{n:"Recife, PE",d:2664},
+  {n:"Fortaleza, CE",d:3098},{n:"Manaus, AM",d:3870},{n:"Belém, PA",d:2527},
+  {n:"Goiânia, GO",d:925},{n:"Brasília, DF",d:1015},{n:"Cuiabá, MT",d:1466},
+  {n:"Campo Grande, MS",d:1005},{n:"Teresina, PI",d:2885},{n:"São Luís, MA",d:2973},
+  {n:"Natal, RN",d:2997},{n:"João Pessoa, PB",d:2809},{n:"Maceió, AL",d:2378},
+  {n:"Aracaju, SE",d:2174},{n:"Vitória, ES",d:1143},{n:"Palmas, TO",d:1878},
+  {n:"Macapá, AP",d:2905},{n:"Boa Vista, RR",d:4326},{n:"Rio Branco, AC",d:3544},
+  {n:"Porto Velho, RO",d:2988},{n:"Cascavel, PR",d:650},{n:"Ponta Grossa, PR",d:335},
+  {n:"Mogi das Cruzes, SP",d:58},{n:"Diadema, SP",d:18},{n:"Carapicuíba, SP",d:25},
+  {n:"Suzano, SP",d:55},{n:"Itaquaquecetuba, SP",d:45},{n:"Taboão da Serra, SP",d:22},
+  {n:"Limeira, SP",d:150},{n:"Araraquara, SP",d:272}
+];
+
+const cidadeInput = document.getElementById('cidadeInput');
+const acList = document.getElementById('acList');
+let selectedCity = null;
+
+cidadeInput.addEventListener('input', () => {
+  selectedCity = null;
+  const q = cidadeInput.value.toLowerCase().trim();
+  if (q.length < 2) { acList.style.display='none'; return; }
+  const m = cidades.filter(c => c.n.toLowerCase().includes(q)).slice(0,8);
+  if (!m.length) { acList.style.display='none'; return; }
+  acList.innerHTML = m.map(c=>`<div class="ac-item" data-nome="${c.n}" data-dist="${c.d}">${c.n}</div>`).join('');
+  acList.style.display = 'block';
+});
+
+acList.addEventListener('click', e => {
+  const item = e.target.closest('.ac-item');
+  if (!item) return;
+  cidadeInput.value = item.dataset.nome;
+  selectedCity = { n: item.dataset.nome, d: parseInt(item.dataset.dist) };
+  acList.style.display = 'none';
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.autocomplete-wrap')) acList.style.display = 'none';
+});
+
+// Stepper
+let nProf = 3;
+const profValEl = document.getElementById('profVal');
+const stepHint = document.getElementById('stepHint');
+function upStepper() {
+  profValEl.textContent = nProf;
+  stepHint.textContent = nProf === 3 ? 'Time padrão (Schai, Gabi, Yasmin)' : nProf === 1 ? '1 profissional' : `${nProf} profissionais`;
+}
+document.getElementById('decBtn').addEventListener('click', () => { if (nProf>1){ nProf--; upStepper(); } });
+document.getElementById('incBtn').addEventListener('click', () => { if (nProf<10){ nProf++; upStepper(); } });
+
+// Pills
+document.querySelectorAll('.pills').forEach(g => {
+  g.querySelectorAll('.pill').forEach(p => {
+    p.addEventListener('click', () => {
+      g.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
     });
   });
+});
 
-  function getVal(group) {
-    const el = document.querySelector(`.pills[data-group="${group}"] .pill.active`);
-    return el ? el.dataset.value : null;
+function getVal(group) {
+  const el = document.querySelector(`.pills[data-group="${group}"] .pill.active`);
+  return el ? el.dataset.value : null;
+}
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('numColab').value='';
+  cidadeInput.value=''; selectedCity=null;
+  nProf=3; upStepper();
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  document.getElementById('resultView').style.display='none';
+  document.getElementById('formView').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.getElementById('calcBtn').addEventListener('click', () => {
+  const num = parseInt(document.getElementById('numColab').value)||0;
+  const fam = getVal('familiaridade');
+  const fmt = getVal('formato');
+  const exp = getVal('expansao');
+  const acs = getVal('acesso');
+
+  if (!num || !fam || !fmt || !exp || !acs || !cidadeInput.value.trim()) {
+    const c = document.getElementById('mainCard');
+    c.classList.add('shake');
+    setTimeout(()=>c.classList.remove('shake'),400);
+    return;
   }
 
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    document.getElementById('numColab').value = '';
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-  });
+  if (!selectedCity) {
+    const q = cidadeInput.value.toLowerCase();
+    const match = cidades.find(c => c.n.toLowerCase().includes(q));
+    selectedCity = match ? match : { n: cidadeInput.value, d: 600 };
+  }
 
-  document.getElementById('backBtn').addEventListener('click', () => {
-    document.getElementById('resultView').style.display = 'none';
-    document.getElementById('formView').style.display = 'block';
-  });
+  const dist = selectedCity.d;
+  const nomeCidade = selectedCity.n;
 
-  document.getElementById('calcBtn').addEventListener('click', () => {
-    const num = parseInt(document.getElementById('numColab').value) || 0;
-    const familiaridade = getVal('familiaridade');
-    const formato = getVal('formato');
-    const expansao = getVal('expansao');
-    const acesso = getVal('acesso');
+  // Modalidade
+  let mod='', badgeClass='', motivos=[], alertas=[];
+  const baixa = fam==='baixa', expSim = exp==='sim', pres = fmt.startsWith('presencial');
 
-    if (!num || !familiaridade || !formato || !expansao || !acesso) {
-      const card = document.querySelector('.card');
-      card.classList.add('error-shake');
-      setTimeout(() => card.classList.remove('error-shake'), 400);
-      return;
-    }
-
-    let modalidade = '';
-    let badgeClass = '';
-    let motivos = [];
-    let alertas = [];
-
-    const baixa = familiaridade === 'baixa';
-    const temExpansao = expansao === 'sim';
-    const formatoPresencial = formato.startsWith('presencial');
-
-    if (num >= 500) {
-      modalidade = 'Presencial';
-      badgeClass = 'badge-presencial';
-      motivos.push('Volume acima de 500 colaboradores');
-    } else if (num >= 100) {
-      if (baixa || formatoPresencial || temExpansao) {
-        modalidade = 'Presencial';
-        badgeClass = 'badge-presencial';
-        if (baixa) motivos.push('Baixa familiaridade com tecnologia');
-        if (formatoPresencial) motivos.push('Colaboradores trabalham de forma presencial');
-        if (temExpansao) motivos.push('Potencial de expansão no grupo');
-      } else {
-        modalidade = 'Remoto assistido';
-        badgeClass = 'badge-remoto-assistido';
-        motivos.push('Volume intermediário sem fatores presenciais obrigatórios');
-      }
-    } else if (num > 50) {
-      if (baixa || temExpansao) {
-        modalidade = 'Presencial';
-        badgeClass = 'badge-presencial';
-        if (baixa) motivos.push('Baixa familiaridade com tecnologia');
-        if (temExpansao) motivos.push('Potencial de expansão no grupo');
-      } else {
-        modalidade = 'Remoto assistido';
-        badgeClass = 'badge-remoto-assistido';
-        motivos.push('Volume acima de 50, mas sem fatores que exijam presencial');
-      }
+  if (num>=500) {
+    mod='Presencial'; badgeClass='badge-presencial';
+    motivos.push('Volume acima de 500 colaboradores');
+  } else if (num>=100) {
+    if (baixa||pres||expSim) {
+      mod='Presencial'; badgeClass='badge-presencial';
+      if(baixa) motivos.push('Baixa familiaridade com tecnologia');
+      if(pres) motivos.push('Colaboradores trabalham de forma presencial');
+      if(expSim) motivos.push('Potencial de expansão no grupo');
     } else {
-      if (baixa) {
-        modalidade = 'Remoto assistido';
-        badgeClass = 'badge-remoto-assistido';
-        motivos.push('Baixa familiaridade — suporte mais ativo necessário');
-      } else {
-        modalidade = 'Remoto';
-        badgeClass = 'badge-remoto';
-        motivos.push('Volume baixo com boa familiaridade tecnológica');
-      }
+      mod='Remoto assistido'; badgeClass='badge-remoto-assistido';
+      motivos.push('Volume intermediário sem fatores presenciais obrigatórios');
     }
-
-    if (acesso === 'dificil' && modalidade === 'Presencial') {
-      alertas.push('Acesso difícil à localização — avaliar viabilidade e custo do deslocamento');
-    }
-    if (formato === 'presencial_distribuido' && modalidade === 'Presencial') {
-      alertas.push('Colaboradores distribuídos em muitas unidades — considerar múltiplas frentes ou etapas');
-    }
-
-    const TAXA = 10, HORAS = 9;
-    let prof = 3, dias = 0, estrategia = '';
-
-    if (modalidade !== 'Remoto') {
-      const totalH = num / TAXA;
-      let diasBruto = (totalH / prof / HORAS) * 1.3;
-      if (diasBruto <= 3) {
-        dias = Math.ceil(diasBruto);
-        estrategia = 'Execução confortável com o time atual (Schai, Gabi, Yasmin)';
-      } else if (diasBruto <= 5) {
-        prof = 4;
-        dias = Math.ceil(((totalH / prof) / HORAS) * 1.3);
-        estrategia = 'Recomendado adicionar +1 apoio ao time';
-      } else {
-        prof = Math.ceil(totalH / (HORAS * 5));
-        dias = 5;
-        estrategia = 'Necessário time ampliado e/ou divisão em etapas simultâneas';
-      }
+  } else if (num>50) {
+    if (baixa||expSim) {
+      mod='Presencial'; badgeClass='badge-presencial';
+      if(baixa) motivos.push('Baixa familiaridade com tecnologia');
+      if(expSim) motivos.push('Potencial de expansão no grupo');
     } else {
-      estrategia = 'Suporte via materiais, supervisores e central de atendimento';
+      mod='Remoto assistido'; badgeClass='badge-remoto-assistido';
+      motivos.push('Volume acima de 50 sem fatores presenciais obrigatórios');
     }
-
-    // Render result
-    document.getElementById('resultTitle').textContent = modalidade;
-    document.getElementById('resultBadge').innerHTML = `<span class="badge ${badgeClass}">${modalidade}</span>`;
-    document.getElementById('estrategiaBox').textContent = estrategia;
-
-    // Metrics
-    let metricsHtml = '';
-    if (modalidade !== 'Remoto') {
-      metricsHtml = `
-        <div class="metric-cell"><div class="metric-cell-label">Profissionais</div><div class="metric-cell-value">${prof}</div><div class="metric-cell-sub">no time</div></div>
-        <div class="metric-cell"><div class="metric-cell-label">Duração estimada</div><div class="metric-cell-value">${dias}</div><div class="metric-cell-sub">dias úteis</div></div>
-        <div class="metric-cell"><div class="metric-cell-label">Colaboradores</div><div class="metric-cell-value">${num.toLocaleString('pt-BR')}</div><div class="metric-cell-sub">a ativar</div></div>
-      `;
+  } else {
+    if (baixa) {
+      mod='Remoto assistido'; badgeClass='badge-remoto-assistido';
+      motivos.push('Baixa familiaridade — suporte mais ativo necessário');
     } else {
-      metricsHtml = `
-        <div class="metric-cell"><div class="metric-cell-label">Colaboradores</div><div class="metric-cell-value">${num.toLocaleString('pt-BR')}</div><div class="metric-cell-sub">a ativar</div></div>
-        <div class="metric-cell"><div class="metric-cell-label">Suporte central</div><div class="metric-cell-value">+</div><div class="metric-cell-sub">avaliar horário</div></div>
-      `;
+      mod='Remoto'; badgeClass='badge-remoto';
+      motivos.push('Volume baixo com boa familiaridade tecnológica');
     }
-    document.getElementById('metricsGrid').innerHTML = metricsHtml;
+  }
 
-    // Motivos
-    document.getElementById('motivoList').innerHTML = motivos.map(m =>
-      `<div class="motivo-item"><div class="motivo-dot"></div><span>${m}</span></div>`
-    ).join('');
-
-    // Alertas
-    if (alertas.length > 0) {
-      document.getElementById('alertaSection').style.display = 'block';
-      document.getElementById('alertaList').innerHTML = alertas.map(a =>
-        `<div class="alert-box alert-amber" style="margin-bottom:6px">${a}</div>`
-      ).join('');
-    } else {
-      document.getElementById('alertaSection').style.display = 'none';
+  // Dias
+  const TAXA=10, HORAS=9;
+  let dias=0, estrategia='';
+  if (mod!=='Remoto') {
+    const totalH = num/TAXA;
+    const diasBruto = ((totalH/nProf)/HORAS)*1.3;
+    dias = Math.ceil(diasBruto);
+    if (dias<=3) estrategia = nProf===3 ? 'Execução confortável com o time atual (Schai, Gabi, Yasmin)' : `Execução confortável com ${nProf} profissionais`;
+    else if (dias<=5) estrategia = `Execução dentro do limite com ${nProf} profissionais — monitorar ritmo`;
+    else {
+      estrategia = `Com ${nProf} profissionais a ação levaria ~${dias} dias — necessário dividir em etapas ou aumentar o time`;
+      alertas.push(`Duração ultrapassa 5 dias úteis — considerar frentes simultâneas ou mais profissionais`);
     }
+  } else {
+    estrategia = 'Suporte via materiais, supervisores e central de atendimento';
+  }
 
-    // Summary
-    const familiaridadeMap = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
-    const formatoMap = {
-      presencial_centralizado: 'Presencial centralizado',
-      presencial_distribuido: 'Presencial distribuído',
-      remoto: 'Remoto',
-      hibrido: 'Híbrido'
-    };
-    document.getElementById('summaryTable').innerHTML = `
-      <tr><td>Familiaridade com tecnologia</td><td>${familiaridadeMap[familiaridade]}</td></tr>
-      <tr><td>Formato de trabalho</td><td>${formatoMap[formato]}</td></tr>
-      <tr><td>Potencial de expansão</td><td>${expansao === 'sim' ? 'Sim' : 'Não'}</td></tr>
-      <tr><td>Acesso ao local</td><td>${acesso === 'facil' ? 'Fácil' : 'Difícil'}</td></tr>
-    `;
+  // Transporte
+  let tTipo='', tDesc='', tIcon='';
+  if (dist===0) {
+    tTipo='Sede — São Paulo, SP'; tDesc='Sem deslocamento necessário'; tIcon='🏢';
+  } else if (dist<=150) {
+    tTipo='Ônibus / Van fretada'; tDesc=`${dist} km de SP — deslocamento por terra rápido (~1–2h)`; tIcon='🚌';
+  } else if (dist<=500) {
+    tTipo='Carro / Ônibus — distância moderada'; tDesc=`${dist} km de SP — avaliar conforto da equipe`; tIcon='🚗';
+  } else if (dist<=1200) {
+    tTipo='Avião recomendado'; tDesc=`${dist} km de SP — distância longa, voo mais eficiente`; tIcon='✈️';
+  } else {
+    tTipo='Avião necessário'; tDesc=`${dist} km de SP — viagem aérea obrigatória`; tIcon='✈️';
+  }
 
-    document.getElementById('formView').style.display = 'none';
-    document.getElementById('resultView').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  // Custo
+  const cT = dist===0?0:dist<=150?1:dist<=500?2:3;
+  const cP = nProf<=2?1:nProf<=4?2:3;
+  const cD = dias<=2?1:dias<=4?2:3;
+  const cTotal = cT+cP+cD;
+  let custoNivel='', custoClass='', custoDesc='';
+  if (cTotal<=4) { custoNivel='Baixo'; custoClass='v-green'; custoDesc='Proximidade e equipe enxuta'; }
+  else if (cTotal<=7) { custoNivel='Médio'; custoClass='v-amber'; custoDesc='Distância e equipe moderadas'; }
+  else { custoNivel='Alto'; custoClass='v-red'; custoDesc='Destino distante ou equipe grande'; }
+
+  if (acs==='dificil'&&mod==='Presencial') alertas.push('Acesso difícil — avaliar infraestrutura local (internet, espaço, logística)');
+  if (fmt==='presencial_distribuido'&&mod==='Presencial') alertas.push('Colaboradores em muitas unidades — planejar itinerário entre unidades');
+
+  // Render
+  document.getElementById('rTitle').textContent = mod;
+  document.getElementById('rBadge').innerHTML = `<span class="mod-badge ${badgeClass}">${mod}</span>`;
+  document.getElementById('rCidade').textContent = nomeCidade;
+  document.getElementById('rDist').textContent = dist===0 ? 'Sede da operação' : `${dist.toLocaleString('pt-BR')} km de São Paulo`;
+
+  const mH = mod!=='Remoto' ? `
+    <div class="mc"><div class="mc-label">Profissionais</div><div class="mc-value">${nProf}</div><div class="mc-sub">no time</div></div>
+    <div class="mc"><div class="mc-label">Duração estimada</div><div class="mc-value">${dias}</div><div class="mc-sub">dias úteis</div></div>
+    <div class="mc"><div class="mc-label">Colaboradores</div><div class="mc-value">${num.toLocaleString('pt-BR')}</div><div class="mc-sub">a ativar</div></div>
+    <div class="mc"><div class="mc-label">Custo estimado</div><div class="mc-value ${custoClass}">${custoNivel}</div><div class="mc-sub">${custoDesc}</div></div>
+  ` : `
+    <div class="mc"><div class="mc-label">Colaboradores</div><div class="mc-value">${num.toLocaleString('pt-BR')}</div><div class="mc-sub">a ativar</div></div>
+    <div class="mc"><div class="mc-label">Custo estimado</div><div class="mc-value v-green">Baixo</div><div class="mc-sub">onboarding remoto</div></div>
+    <div class="mc"><div class="mc-label">Distância SP</div><div class="mc-value v-blue">${dist.toLocaleString('pt-BR')}</div><div class="mc-sub">km</div></div>
+    <div class="mc"><div class="mc-label">Transporte</div><div class="mc-value" style="font-size:22px">${tIcon}</div><div class="mc-sub">${dist===0?'Sede':dist<=500?'Terrestre':'Aéreo'}</div></div>
+  `;
+  document.getElementById('rMetrics').innerHTML = mH;
+
+  document.getElementById('rTransport').innerHTML = `
+    <div class="t-icon">${tIcon}</div>
+    <div><div class="t-title">${tTipo}</div><div class="t-desc">${tDesc}</div></div>
+  `;
+
+  document.getElementById('rEstrategia').textContent = estrategia;
+  document.getElementById('rMotivos').innerHTML = motivos.map(m=>`<div class="motivo-item"><div class="motivo-dot"></div><span>${m}</span></div>`).join('');
+
+  if (alertas.length) {
+    document.getElementById('rAlertaSection').style.display='block';
+    document.getElementById('rAlertaList').innerHTML = alertas.map(a=>`<div class="abox a-amber" style="margin-bottom:6px">${a}</div>`).join('');
+  } else {
+    document.getElementById('rAlertaSection').style.display='none';
+  }
+
+  const fMap={alta:'Alta',media:'Média',baixa:'Baixa'};
+  const ftMap={presencial_centralizado:'Presencial centralizado',presencial_distribuido:'Presencial distribuído',remoto:'Remoto',hibrido:'Híbrido'};
+  document.getElementById('rSummary').innerHTML = `
+    <tr><td>Colaboradores</td><td>${num.toLocaleString('pt-BR')}</td></tr>
+    <tr><td>Localização</td><td>${nomeCidade}</td></tr>
+    <tr><td>Distância de SP</td><td>${dist.toLocaleString('pt-BR')} km</td></tr>
+    <tr><td>Transporte sugerido</td><td>${tTipo}</td></tr>
+    <tr><td>Familiaridade com tecnologia</td><td>${fMap[fam]}</td></tr>
+    <tr><td>Formato de trabalho</td><td>${ftMap[fmt]}</td></tr>
+    <tr><td>Potencial de expansão</td><td>${exp==='sim'?'Sim':'Não'}</td></tr>
+    <tr><td>Acesso ao local</td><td>${acs==='facil'?'Fácil':'Difícil'}</td></tr>
+    <tr><td>Profissionais no time</td><td>${nProf}</td></tr>
+    <tr><td>Custo estimado</td><td>${custoNivel}</td></tr>
+  `;
+
+  document.getElementById('formView').style.display='none';
+  document.getElementById('resultView').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
 </script>
 </body>
 </html>
