@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kesh — Calculadora de Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F5F3EE;
+      --surface: #FFFFFF;
+      --surface2: #EFEFEA;
+      --border: #E0DDD6;
+      --border2: #C8C5BC;
+      --text: #1A1916;
+      --text2: #6B6860;
+      --text3: #9E9C96;
+      --accent: #1A1916;
+      --blue-bg: #EAF0FB;
+      --blue-text: #1A3A7A;
+      --blue-border: #B8CCEE;
+      --green-bg: #E8F5EC;
+      --green-text: #1A5C30;
+      --green-border: #B3D9C0;
+      --amber-bg: #FDF3E3;
+      --amber-text: #7A4A10;
+      --amber-border: #F0CF96;
+      --red-bg: #FDECEA;
+      --red-text: #7A2020;
+      --red-border: #F0B8B3;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    header {
+      max-width: 680px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .logo span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--text);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+    }
+
+    .header-label {
+      font-size: 12px;
+      color: var(--text3);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-icon svg { width: 18px; height: 18px; color: var(--text2); }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .card-body {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .field-group { display: flex; flex-direction: column; gap: 10px; }
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .pill:hover {
+      border-color: var(--border2);
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .pill.active {
+      background: var(--text);
+      border-color: var(--text);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .num-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .num-row input[type=number] {
+      width: 120px;
+      padding: 9px 12px;
+      font-size: 15px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .num-row input[type=number]:focus { border-color: var(--border2); }
+    .num-row input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .num-label { font-size: 13px; color: var(--text3); }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+    }
+
+    .card-footer {
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-clear {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 18px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-clear:hover { border-color: var(--border2); color: var(--text); }
+
+    .btn-calc {
+      background: var(--text);
+      border: 1px solid var(--text);
+      border-radius: var(--radius);
+      padding: 10px 22px;
+      font-size: 13px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-calc:hover { opacity: 0.85; }
+
+    /* Result */
+    #resultView { display: none; }
+
+    .result-hero {
+      padding: 1.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .result-hero-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text3);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .result-hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      letter-spacing: 0.03em;
+      border: 1px solid;
+    }
+
+    .badge-presencial { background: var(--blue-bg); color: var(--blue-text); border-color: var(--blue-border); }
+    .badge-remoto { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
+    .badge-remoto-assistido { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .metric-cell {
+      background: var(--surface);
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+    }
+
+    .metric-cell-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text3);
+      margin-bottom: 6px;
+    }
+
+    .metric-cell-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .metric-cell-sub {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 4px;
+    }
+
+    .result-sections { padding: 1.75rem; display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .section-block { display: flex; flex-direction: column; gap: 8px; }
+
+    .section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text3);
+      font-weight: 500;
+    }
+
+    .alert-box {
+      padding: 11px 14px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      line-height: 1.55;
+      border: 1px solid;
+    }
+
+    .alert-blue { background: var(--blue-bg); color: var(--blue-text); border-color: var(--blue-border); }
+    .alert-amber { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
+
+    .motivo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .motivo-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .motivo-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--border2);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    .summary-table { width: 100%; border-collapse: collapse; }
+
+    .summary-table tr { border-bottom: 1px solid var(--border); }
+    .summary-table tr:last-child { border-bottom: none; }
+
+    .summary-table td {
+      padding: 9px 0;
+      font-size: 13px;
+    }
+
+    .summary-table td:first-child { color: var(--text3); width: 55%; }
+    .summary-table td:last-child { color: var(--text); font-weight: 500; text-align: right; }
+
+    .result-footer {
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .btn-back {
+      background: transparent;
+      border: none;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+      padding: 0;
+    }
+
+    .btn-back:hover { color: var(--text); }
+
+    .error-shake {
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    @media (max-width: 540px) {
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-cell:nth-child(3) { grid-column: span 2; }
+      .result-hero { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">kesh<span></span></div>
+  <div class="header-label">Calculadora de Onboarding</div>
+</header>
+
+<div class="card">
+
+  <!-- FORM VIEW -->
+  <div id="formView">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="4" y="2" width="12" height="16" rx="2"/>
+          <path d="M7 7h6M7 10h6M7 13h4"/>
+        </svg>
+      </div>
+      <div>
+        <div class="card-title">Dados do cliente</div>
+        <div class="card-subtitle">Preencha as informações abaixo para receber a recomendação de modalidade e equipe.</div>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="field-group">
+        <label class="field-label">Quantos colaboradores serão ativados?</label>
+        <div class="num-row">
+          <input type="number" id="numColab" min="1" placeholder="150">
+          <span class="num-label">colaboradores</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-group">
+        <label class="field-label">Familiaridade dos colaboradores com tecnologia</label>
+        <div class="pills" data-group="familiaridade">
+          <button type="button" class="pill" data-value="alta">Alta — usam smartphone com facilidade</button>
+          <button type="button" class="pill" data-value="media">Média — precisam de algum suporte</button>
+          <button type="button" class="pill" data-value="baixa">Baixa — pouca familiaridade</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-group">
+        <label class="field-label">Formato de trabalho</label>
+        <div class="pills" data-group="formato">
+          <button type="button" class="pill" data-value="presencial_centralizado">Presencial — poucas unidades</button>
+          <button type="button" class="pill" data-value="presencial_distribuido">Presencial — muitas unidades</button>
+          <button type="button" class="pill" data-value="remoto">Remoto / Home office</button>
+          <button type="button" class="pill" data-value="hibrido">Híbrido</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-group">
+        <label class="field-label">Potencial de expansão no grupo</label>
+        <div class="pills" data-group="expansao">
+          <button type="button" class="pill" data-value="sim">Sim — há potencial de novas vidas</button>
+          <button type="button" class="pill" data-value="nao">Não</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-group">
+        <label class="field-label">Estrutura de acesso aos colaboradores</label>
+        <div class="pills" data-group="acesso">
+          <button type="button" class="pill" data-value="facil">Fácil — local acessível, boa infraestrutura</button>
+          <button type="button" class="pill" data-value="dificil">Difícil — localização remota ou limitada</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-footer">
+      <button type="button" class="btn-clear" id="clearBtn">Limpar</button>
+      <button type="button" class="btn-calc" id="calcBtn">Calcular →</button>
+    </div>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div id="resultView">
+    <div class="result-hero">
+      <div>
+        <div class="result-hero-label">Modalidade recomendada</div>
+        <div class="result-hero-title" id="resultTitle">—</div>
+      </div>
+      <div id="resultBadge"></div>
+    </div>
+
+    <div class="metrics-grid" id="metricsGrid"></div>
+
+    <div class="result-sections">
+
+      <div class="section-block">
+        <div class="section-label">Estratégia de execução</div>
+        <div class="alert-box alert-blue" id="estrategiaBox"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-label">Por que essa recomendação?</div>
+        <div class="motivo-list" id="motivoList"></div>
+      </div>
+
+      <div id="alertaSection" style="display:none">
+        <div class="section-block">
+          <div class="section-label">Pontos de atenção</div>
+          <div id="alertaList"></div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-label">Resumo do cliente</div>
+        <table class="summary-table" id="summaryTable"></table>
+      </div>
+
+    </div>
+
+    <div class="result-footer">
+      <button type="button" class="btn-back" id="backBtn">← Preencher novamente</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Pill selection
+  document.querySelectorAll('.pills').forEach(group => {
+    group.querySelectorAll('.pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      });
+    });
+  });
+
+  function getVal(group) {
+    const el = document.querySelector(`.pills[data-group="${group}"] .pill.active`);
+    return el ? el.dataset.value : null;
+  }
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    document.getElementById('numColab').value = '';
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  });
+
+  document.getElementById('backBtn').addEventListener('click', () => {
+    document.getElementById('resultView').style.display = 'none';
+    document.getElementById('formView').style.display = 'block';
+  });
+
+  document.getElementById('calcBtn').addEventListener('click', () => {
+    const num = parseInt(document.getElementById('numColab').value) || 0;
+    const familiaridade = getVal('familiaridade');
+    const formato = getVal('formato');
+    const expansao = getVal('expansao');
+    const acesso = getVal('acesso');
+
+    if (!num || !familiaridade || !formato || !expansao || !acesso) {
+      const card = document.querySelector('.card');
+      card.classList.add('error-shake');
+      setTimeout(() => card.classList.remove('error-shake'), 400);
+      return;
+    }
+
+    let modalidade = '';
+    let badgeClass = '';
+    let motivos = [];
+    let alertas = [];
+
+    const baixa = familiaridade === 'baixa';
+    const temExpansao = expansao === 'sim';
+    const formatoPresencial = formato.startsWith('presencial');
+
+    if (num >= 500) {
+      modalidade = 'Presencial';
+      badgeClass = 'badge-presencial';
+      motivos.push('Volume acima de 500 colaboradores');
+    } else if (num >= 100) {
+      if (baixa || formatoPresencial || temExpansao) {
+        modalidade = 'Presencial';
+        badgeClass = 'badge-presencial';
+        if (baixa) motivos.push('Baixa familiaridade com tecnologia');
+        if (formatoPresencial) motivos.push('Colaboradores trabalham de forma presencial');
+        if (temExpansao) motivos.push('Potencial de expansão no grupo');
+      } else {
+        modalidade = 'Remoto assistido';
+        badgeClass = 'badge-remoto-assistido';
+        motivos.push('Volume intermediário sem fatores presenciais obrigatórios');
+      }
+    } else if (num > 50) {
+      if (baixa || temExpansao) {
+        modalidade = 'Presencial';
+        badgeClass = 'badge-presencial';
+        if (baixa) motivos.push('Baixa familiaridade com tecnologia');
+        if (temExpansao) motivos.push('Potencial de expansão no grupo');
+      } else {
+        modalidade = 'Remoto assistido';
+        badgeClass = 'badge-remoto-assistido';
+        motivos.push('Volume acima de 50, mas sem fatores que exijam presencial');
+      }
+    } else {
+      if (baixa) {
+        modalidade = 'Remoto assistido';
+        badgeClass = 'badge-remoto-assistido';
+        motivos.push('Baixa familiaridade — suporte mais ativo necessário');
+      } else {
+        modalidade = 'Remoto';
+        badgeClass = 'badge-remoto';
+        motivos.push('Volume baixo com boa familiaridade tecnológica');
+      }
+    }
+
+    if (acesso === 'dificil' && modalidade === 'Presencial') {
+      alertas.push('Acesso difícil à localização — avaliar viabilidade e custo do deslocamento');
+    }
+    if (formato === 'presencial_distribuido' && modalidade === 'Presencial') {
+      alertas.push('Colaboradores distribuídos em muitas unidades — considerar múltiplas frentes ou etapas');
+    }
+
+    const TAXA = 10, HORAS = 9;
+    let prof = 3, dias = 0, estrategia = '';
+
+    if (modalidade !== 'Remoto') {
+      const totalH = num / TAXA;
+      let diasBruto = (totalH / prof / HORAS) * 1.3;
+      if (diasBruto <= 3) {
+        dias = Math.ceil(diasBruto);
+        estrategia = 'Execução confortável com o time atual (Schai, Gabi, Yasmin)';
+      } else if (diasBruto <= 5) {
+        prof = 4;
+        dias = Math.ceil(((totalH / prof) / HORAS) * 1.3);
+        estrategia = 'Recomendado adicionar +1 apoio ao time';
+      } else {
+        prof = Math.ceil(totalH / (HORAS * 5));
+        dias = 5;
+        estrategia = 'Necessário time ampliado e/ou divisão em etapas simultâneas';
+      }
+    } else {
+      estrategia = 'Suporte via materiais, supervisores e central de atendimento';
+    }
+
+    // Render result
+    document.getElementById('resultTitle').textContent = modalidade;
+    document.getElementById('resultBadge').innerHTML = `<span class="badge ${badgeClass}">${modalidade}</span>`;
+    document.getElementById('estrategiaBox').textContent = estrategia;
+
+    // Metrics
+    let metricsHtml = '';
+    if (modalidade !== 'Remoto') {
+      metricsHtml = `
+        <div class="metric-cell"><div class="metric-cell-label">Profissionais</div><div class="metric-cell-value">${prof}</div><div class="metric-cell-sub">no time</div></div>
+        <div class="metric-cell"><div class="metric-cell-label">Duração estimada</div><div class="metric-cell-value">${dias}</div><div class="metric-cell-sub">dias úteis</div></div>
+        <div class="metric-cell"><div class="metric-cell-label">Colaboradores</div><div class="metric-cell-value">${num.toLocaleString('pt-BR')}</div><div class="metric-cell-sub">a ativar</div></div>
+      `;
+    } else {
+      metricsHtml = `
+        <div class="metric-cell"><div class="metric-cell-label">Colaboradores</div><div class="metric-cell-value">${num.toLocaleString('pt-BR')}</div><div class="metric-cell-sub">a ativar</div></div>
+        <div class="metric-cell"><div class="metric-cell-label">Suporte central</div><div class="metric-cell-value">+</div><div class="metric-cell-sub">avaliar horário</div></div>
+      `;
+    }
+    document.getElementById('metricsGrid').innerHTML = metricsHtml;
+
+    // Motivos
+    document.getElementById('motivoList').innerHTML = motivos.map(m =>
+      `<div class="motivo-item"><div class="motivo-dot"></div><span>${m}</span></div>`
+    ).join('');
+
+    // Alertas
+    if (alertas.length > 0) {
+      document.getElementById('alertaSection').style.display = 'block';
+      document.getElementById('alertaList').innerHTML = alertas.map(a =>
+        `<div class="alert-box alert-amber" style="margin-bottom:6px">${a}</div>`
+      ).join('');
+    } else {
+      document.getElementById('alertaSection').style.display = 'none';
+    }
+
+    // Summary
+    const familiaridadeMap = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
+    const formatoMap = {
+      presencial_centralizado: 'Presencial centralizado',
+      presencial_distribuido: 'Presencial distribuído',
+      remoto: 'Remoto',
+      hibrido: 'Híbrido'
+    };
+    document.getElementById('summaryTable').innerHTML = `
+      <tr><td>Familiaridade com tecnologia</td><td>${familiaridadeMap[familiaridade]}</td></tr>
+      <tr><td>Formato de trabalho</td><td>${formatoMap[formato]}</td></tr>
+      <tr><td>Potencial de expansão</td><td>${expansao === 'sim' ? 'Sim' : 'Não'}</td></tr>
+      <tr><td>Acesso ao local</td><td>${acesso === 'facil' ? 'Fácil' : 'Difícil'}</td></tr>
+    `;
+
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('resultView').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
